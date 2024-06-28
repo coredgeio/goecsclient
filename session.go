@@ -25,13 +25,18 @@ const (
 	TimeBufferInSeconds = int64(300)
 )
 
-func (s *ecsSession) Get(subUrl string, q url.Values) ([]byte, error) {
+func (s *ecsSession) Get(subUrl string, q url.Values, headers map[string]string) ([]byte, error) {
 	req, err := http.NewRequest("GET", s.Endpoint+subUrl, nil)
 	if q != nil {
 		req.URL.RawQuery = q.Encode()
 	}
 	req.Header.Set("X-SDS-AUTH-TOKEN", s.Token)
 	req.Header.Set("Accept", "application/json")
+
+	for k, v := range headers {
+		req.Header.Set(k, v)
+	}
+	
 	resp, err := s.c.Do(req)
 	if err != nil {
 		log.Println(err)
@@ -59,7 +64,7 @@ func (s *ecsSession) Get(subUrl string, q url.Values) ([]byte, error) {
 	return bodyBytes, nil
 }
 
-func (s *ecsSession) Post(subUrl string, d []byte, q url.Values) ([]byte, error) {
+func (s *ecsSession) Post(subUrl string, d []byte, q url.Values, headers map[string]string) ([]byte, error) {
 	req, _ := http.NewRequest("POST", s.Endpoint+subUrl, bytes.NewReader(d))
 	if q != nil {
 		req.URL.RawQuery = q.Encode()
@@ -67,6 +72,10 @@ func (s *ecsSession) Post(subUrl string, d []byte, q url.Values) ([]byte, error)
 	req.Header.Set("X-SDS-AUTH-TOKEN", s.Token)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Accept", "application/json")
+	
+	for k, v := range headers {
+		req.Header.Set(k, v)
+	}
 	resp, err := s.c.Do(req)
 	if err != nil {
 		log.Println(err)

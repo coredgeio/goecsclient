@@ -6,8 +6,8 @@ import (
 )
 
 type EcsClient interface {
-	Get(subUrl string, query url.Values) ([]byte, error)
-	Post(subUrl string, data []byte, query url.Values) ([]byte, error)
+	Get(subUrl string, query url.Values, h map[string]string) ([]byte, error)
+	Post(subUrl string, data []byte, query url.Values, h map[string]string) ([]byte, error)
 	Put(subUrl string, data []byte, query url.Values) ([]byte, error)
 }
 
@@ -18,12 +18,12 @@ type ecsClient struct {
 	Session  *ecsSession
 }
 
-func (c *ecsClient) Get(subUrl string, query url.Values) ([]byte, error) {
-	return c.Session.Get(subUrl, query)
+func (c *ecsClient) Get(subUrl string, query url.Values, h map[string]string) ([]byte, error) {
+	return c.Session.Get(subUrl, query, h)
 }
 
-func (c *ecsClient) Post(subUrl string, data []byte, query url.Values) ([]byte, error) {
-	return c.Session.Post(subUrl, data, query)
+func (c *ecsClient) Post(subUrl string, data []byte, query url.Values, h map[string]string) ([]byte, error) {
+	return c.Session.Post(subUrl, data, query, h)
 }
 
 func (c *ecsClient) Put(subUrl string, data []byte, query url.Values) ([]byte, error) {

@@ -39,7 +39,7 @@ func (c *bucketClient) GetList(param *BucketListParameters) (*BucketListResp, er
 		}
 	}
 
-	bytes, err := c.apiClient.Get("/object/bucket", query)
+	bytes, err := c.apiClient.Get("/object/bucket", query, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -57,7 +57,7 @@ func (c *bucketClient) Create(req *BucketCreateReq) (*BucketCreateResp, error) {
 		return nil, err
 	}
 
-	bytes, err := c.apiClient.Post("/object/bucket", data, nil)
+	bytes, err := c.apiClient.Post("/object/bucket", data, nil, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -75,7 +75,7 @@ func (c *bucketClient) Delete(name, namespace string) error {
 		query = url.Values{}
 		query.Add("namespace", namespace)
 	}
-	_, err := c.apiClient.Post("/object/bucket/"+name+"/deactivate", nil, query)
+	_, err := c.apiClient.Post("/object/bucket/"+name+"/deactivate", nil, query, nil)
 	if err != nil {
 		return err
 	}
@@ -98,7 +98,7 @@ func (c *bucketClient) GetBillingInfo(name, namespace, sizeunit string) (*Bucket
 		query = url.Values{}
 		query.Add("sizeunit", sizeunit)
 	}
-	bytes, err := c.apiClient.Get("/object/billing/buckets/"+namespace+"/"+name+"/info", query)
+	bytes, err := c.apiClient.Get("/object/billing/buckets/"+namespace+"/"+name+"/info", query, nil)
 	if err != nil {
 		return nil, err
 	}
